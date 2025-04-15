@@ -1,0 +1,20 @@
+from flask import Flask, request
+from twilio.twiml.messaging_response import MessagingResponse
+
+app = Flask(__name__)
+
+@app.route("/webhook", methods=["POST"])
+def whatsapp_reply():
+    incoming_msg = request.values.get('Body', '').strip().lower()
+    resp = MessagingResponse()
+    msg = resp.message()
+
+    if incoming_msg == 'rvnl':
+        msg.body("RVNL एक मजबूत रेलवे इंफ्रास्ट्रक्चर कंपनी है।\n\nRecommendation: BUY\nReason: अच्छा ऑर्डर बुक, सरकारी प्रोजेक्ट्स में भागीदारी और consistent revenue growth.")
+    else:
+        msg.body("Stock जानकारी के लिए कोई stock नाम भेजें (जैसे: RVNL)।")
+
+    return str(resp)
+
+if __name__ == "__main__":
+    app.run(debug=True)
